@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Applause Repo Browser</string>
+    <string name="repository_name">Repository name</string>
+    <string name="private_repository">Private repository:</string>
+    <string name="language">Language:</string>
+    <string name="created_at">Created at:</string>
+    <string name="last_updated_at">Last updated at:</string>
+</resources>
