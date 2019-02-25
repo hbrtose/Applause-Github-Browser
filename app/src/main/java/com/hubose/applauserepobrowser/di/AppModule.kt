@@ -22,7 +22,7 @@ import org.koin.dsl.module.module
 
 val viewModels = module {
     viewModel { ListViewModel(get(), get(), get(), BuildConfig.REPO_OWNER_NAME, BuildConfig.NUMBER_OF_REPOS) }
-    viewModel { DetailViewModel(get()) }
+    viewModel { (id : Int) -> DetailViewModel(id, get()) }
 }
 
 val dataModule = module(createOnStart = true) {

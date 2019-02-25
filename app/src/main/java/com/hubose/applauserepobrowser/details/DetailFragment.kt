@@ -17,17 +17,17 @@ import com.hubose.applauserepobrowser.common.url
 import com.hubose.domain.entity.RepoEntity
 import kotlinx.android.synthetic.main.layout_fragment_detail.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
 class DetailFragment: Fragment(){
 
-    private val detailViewModel: DetailViewModel by viewModel()
+    private val detailViewModel: DetailViewModel by viewModel { parametersOf(args.repoId) }
     private val args: DetailFragmentArgs by navArgs()
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         detailViewModel.getLiveData().observe(this, Observer { handleRepoData(it) })
         detailViewModel.error.observe(this, Observer { context?.toast(it.localizedMessage) })
-        detailViewModel.getRepo(args.repoId)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
