@@ -38,17 +38,16 @@ dependencies {
 
     implementation rootProject.ext.coreKtx
     implementation rootProject.ext.fragmentKtx
-    implementation rootProject.ext.rxJava
     implementation rootProject.ext.retrofit
     implementation rootProject.ext.retrofitMoshiConverter
     implementation rootProject.ext.moshiAdapters
-    implementation rootProject.ext.retrofitRxJava2Adapter
     implementation rootProject.ext.loggingInterceptor
     implementation rootProject.ext.koin
     implementation rootProject.ext.koinViewModel
 
     implementation rootProject.ext.rxAndroid
     implementation rootProject.ext.lifecycleExtensions
+    implementation rootProject.ext.lifecycleViewModel
     implementation rootProject.ext.navigationFragment
     implementation rootProject.ext.navigationUi
 

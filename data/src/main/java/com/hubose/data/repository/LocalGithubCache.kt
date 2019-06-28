@@ -2,23 +2,23 @@ package com.hubose.data.repository
 
 import com.hubose.domain.GithubCache
 import com.hubose.domain.entity.RepoEntity
-import io.reactivex.Single
+import java.lang.IllegalArgumentException
 
 class LocalGithubCache: GithubCache {
 
     private val repoCache: HashMap<Int, RepoEntity> = LinkedHashMap()
 
-    override fun save(repos: List<RepoEntity>) {
+    override suspend fun save(repos: List<RepoEntity>) {
         repos.forEach { repoCache[it.id] = it }
     }
 
-    override fun getRepoById(repoId: Int): Single<RepoEntity> {
-        return Single.just(repoCache[repoId])
+    override suspend fun getRepoById(repoId: Int): RepoEntity {
+        return repoCache[repoId] ?: throw IllegalArgumentException("Illegal id")
     }
 
-    override fun filter(phrase: String): Single<List<RepoEntity>> {
-        return Single.just(repoCache.values.filter {
+    override suspend fun filter(phrase: String): List<RepoEntity> {
+        return repoCache.values.filter {
             it.name.toLowerCase().contains(phrase.toLowerCase())
-        })
+        }
     }
 }

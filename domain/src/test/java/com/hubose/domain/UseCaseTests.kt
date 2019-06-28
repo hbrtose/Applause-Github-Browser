@@ -1,7 +1,6 @@
 package com.hubose.domain
 
 import com.hubose.domain.common.SampleDataGenerator
-import com.hubose.domain.common.TestTransformer
 import com.hubose.domain.entity.RepoEntity
 import com.hubose.domain.usecase.GetAllRepos
 import io.reactivex.Single

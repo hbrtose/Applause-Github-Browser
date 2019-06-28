@@ -1,10 +1,9 @@
 package com.hubose.domain
 
 import com.hubose.domain.entity.RepoEntity
-import io.reactivex.Single
 
 interface GithubCache {
-    fun save(repos: List<RepoEntity>)
-    fun getRepoById(repoId: Int): Single<RepoEntity>
-    fun filter(phrase: String): Single<List<RepoEntity>>
+    suspend fun save(repos: List<RepoEntity>)
+    suspend fun getRepoById(repoId: Int): RepoEntity
+    suspend fun filter(phrase: String): List<RepoEntity>
 }

@@ -1,7 +1,6 @@
 package com.hubose.applauserepobrowser.di
 
 import com.hubose.applauserepobrowser.BuildConfig
-import com.hubose.applauserepobrowser.common.AsyncTransformer
 import com.hubose.applauserepobrowser.details.DetailViewModel
 import com.hubose.applauserepobrowser.entity.RepoListItem
 import com.hubose.applauserepobrowser.list.ListViewModel
@@ -32,9 +31,9 @@ val dataModule = module(createOnStart = true) {
 }
 
 val useCases = module {
-    factory { GetAllRepos(AsyncTransformer(), get()) }
-    factory { GetRepoById(AsyncTransformer(), get()) }
-    factory { SearchRepos(AsyncTransformer(), get()) }
+    factory { GetAllRepos(get()) }
+    factory { GetRepoById(get()) }
+    factory { SearchRepos(get()) }
 }
 
 val mappers = module {

@@ -36,10 +36,10 @@ class DetailFragment: Fragment(){
 
     private fun handleRepoData(repo: RepoEntity){
         activity?.title = repo.name
-        tv_detail_fullname.url(repo.url, repo.fullName)
-        tv_detail_language.addTextStyled(styleText(repo.language))
-        tv_detail_created.addTextStyled(styleText(repo.createdAt))
-        tv_detail_last_updated.addTextStyled(styleText(repo.lastUpdated))
+        tv_detail_fullname.url(repo.url ?: "", repo.fullName ?: "")
+        tv_detail_language.addTextStyled(styleText(repo.language ?: ""))
+        tv_detail_created.addTextStyled(styleText(repo.createdAt ?: ""))
+        tv_detail_last_updated.addTextStyled(styleText(repo.lastUpdated ?: ""))
         switch_detail_private.isChecked = repo.isPrivate
     }
 
