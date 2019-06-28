@@ -5,6 +5,13 @@ import android.text.method.LinkMovementMethod
 import android.view.View
 import android.widget.EditText
 import android.widget.TextView
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.channels.ReceiveChannel
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.selects.whileSelect
+import java.util.concurrent.TimeUnit
 
 fun View.setVisible(visible: Boolean) {
     this.visibility = if (visible) View.VISIBLE else View.GONE
@@ -34,3 +41,38 @@ fun EditText.onTextChanged(onTextChanged: (String) -> Unit) {
         }
     })
 }
+
+@ExperimentalCoroutinesApi
+fun <T> ReceiveChannel<T>.debounce(time: Long, scope: CoroutineScope): ReceiveChannel<T> =
+    Channel<T>(capacity = Channel.CONFLATED).also { channel ->
+        scope.launch {
+            var value = receive()
+            whileSelect {
+                onTimeout(time) {
+                    channel.offer(value)
+                    value = receive()
+                    true
+                }
+                onReceive {
+                    value = it
+                    true
+                }
+            }
+        }
+    }
+
+fun EditText.onTextChanged(): ReceiveChannel<String> =
+    Channel<String>(capacity = Channel.UNLIMITED).also { channel ->
+        addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(editable: Editable?) {
+                editable?.toString().orEmpty().let(channel::offer)
+            }
+
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+        })
+    }

@@ -9,12 +9,19 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.hubose.applauserepobrowser.R
+import com.hubose.applauserepobrowser.common.debounce
 import com.hubose.applauserepobrowser.common.onTextChanged
 import kotlinx.android.synthetic.main.layout_fragment_list.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.channels.consumeEach
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class ListFragment: Fragment(){
+class ListFragment: Fragment(), CoroutineScope by MainScope(){
 
     private val listViewModel: ListViewModel by viewModel()
     private lateinit var adapter: ListAdapter
@@ -31,8 +38,10 @@ class ListFragment: Fragment(){
         adapter = ListAdapter(listViewModel.getViewState(), this) {
             findNavController().navigate(ListFragmentDirections.actionListToDetail(it.id))
         }
-        et_list_search.onTextChanged {
-            listViewModel.filter(it)
+        launch {
+            et_list_search.onTextChanged()
+                .debounce(1000, this)
+                .consumeEach { listViewModel.filter(et_list_search.text.toString()) }
         }
         rv_list_items.layoutManager = LinearLayoutManager(context)
         rv_list_items.adapter = adapter
