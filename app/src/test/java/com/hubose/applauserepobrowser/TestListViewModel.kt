@@ -1,6 +1,5 @@
 package com.hubose.applauserepobrowser
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import com.hubose.applauserepobrowser.entity.RepoListItem
 import com.hubose.applauserepobrowser.list.ListViewModel
@@ -11,31 +10,15 @@ import com.hubose.domain.GithubCache
 import com.hubose.domain.GithubRepository
 import com.hubose.domain.common.Mapper
 import com.hubose.domain.common.SampleDataGenerator
-import com.hubose.domain.common.TestTransformer
 import com.hubose.domain.entity.RepoEntity
 import com.hubose.domain.usecase.GetAllRepos
 import com.hubose.domain.usecase.SearchRepos
-import io.reactivex.Single
+import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Before
-import org.junit.ClassRule
-import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.mockito.Mockito.*
-import org.mockito.junit.MockitoJUnitRunner
 
-@RunWith(MockitoJUnitRunner::class)
 class TestListViewModel {
-
-    companion object {
-        @ClassRule
-        @JvmField
-        var schedulers = RxImmediateSchedulerRule()
-    }
-
-    @Rule
-    @JvmField
-    val rule = InstantTaskExecutorRule()
 
     private lateinit var listViewModel: ListViewModel
     private lateinit var githubRepository: GithubRepository
@@ -50,12 +33,14 @@ class TestListViewModel {
     fun prepare(){
         githubCache = LocalGithubCache()
         githubRepository = mock(GithubRepository::class.java)
-        val getAllRepos = GetAllRepos(TestTransformer(), githubRepository)
-        val searchRepos = SearchRepos(TestTransformer(), githubCache)
+        val getAllRepos = GetAllRepos(githubRepository)
+        val searchRepos = SearchRepos(githubCache)
         mapper = RepoEntityToListItemMapper()
         val repos = SampleDataGenerator.generateRepoEntityList(5)
-        `when`(githubRepository.getRepos(OWNER, NUMBER)).thenReturn(Single.just(repos))
-        listViewModel = ListViewModel(getAllRepos, searchRepos, mapper, OWNER, NUMBER)
+        runBlockingTest {
+            `when`(githubRepository.getRepos(OWNER, NUMBER)).thenReturn(repos)
+            listViewModel = ListViewModel(getAllRepos, searchRepos, mapper, OWNER, NUMBER)
+        }
         listObserver = mock(Observer::class.java) as Observer<ListViewState>
         errorObserver = mock(Observer::class.java) as Observer<Throwable>
         listViewModel.getViewState().observeForever(listObserver)
@@ -72,7 +57,9 @@ class TestListViewModel {
     @Test
     fun search(){
         val repos = SampleDataGenerator.generateRepoEntityList(5)
-        githubCache.save(repos)
+        runBlockingTest {
+            githubCache.save(repos)
+        }
         val result = SampleDataGenerator.getTestRepoEntity(3)
         listViewModel.filter("3")
         verifyZeroInteractions(errorObserver)

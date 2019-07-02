@@ -4,22 +4,15 @@ import com.hubose.domain.GithubCache
 import com.hubose.domain.entity.RepoEntity
 import java.lang.IllegalArgumentException
 
-class SearchRepos(private val repository: GithubCache): UseCase<List<RepoEntity>>() {
-
-    companion object {
-        private const val PARAM_PHRASE = "param:phrase"
-    }
+class SearchRepos(private val repository: GithubCache): UseCase<String, List<RepoEntity>>() {
 
     suspend fun search(phrase: String): List<RepoEntity> {
-        val data = HashMap<String, String>()
-        data[PARAM_PHRASE] = phrase
-        return observable(data)
+        return observable(phrase)
     }
 
-    override suspend fun createObservable(data: Map<String, Any>?): List<RepoEntity> {
-        val phrase = data?.get(PARAM_PHRASE)
-        phrase?.let {
-            return repository.filter(it as String)
+    override suspend fun createObservable(data: String?): List<RepoEntity> {
+        data?.let {
+            return repository.filter(it)
         } ?: throw IllegalArgumentException("No phrase provided")
     }
 }

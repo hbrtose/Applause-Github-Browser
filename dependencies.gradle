@@ -23,6 +23,6 @@ ext {
 
     // Testing
     junit = "androidx.test.ext:junit:1.0.0"
-    mockito = "org.mockito:mockito-core:2.8.47"
+    mockito = "org.mockito:mockito-core:2.28.2"
     androidTestRunner = "com.android.support.test:runner:1.0.1"
 }

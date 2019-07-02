@@ -3,10 +3,9 @@ package com.hubose.domain
 import com.hubose.domain.common.SampleDataGenerator
 import com.hubose.domain.entity.RepoEntity
 import com.hubose.domain.usecase.GetAllRepos
-import io.reactivex.Single
+import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Before
 import org.junit.Test
-import org.mockito.ArgumentMatchers
 import org.mockito.Mockito.*
 
 class UseCaseTests {
@@ -22,12 +21,11 @@ class UseCaseTests {
 
     @Test
     fun testGetAllRepos(){
-        val getAllRepos = GetAllRepos(TestTransformer(), githubRepository)
-
-        `when`(githubRepository.getRepos(ArgumentMatchers.anyString(), ArgumentMatchers.anyInt())).thenReturn(Single.just(repos))
-
-        getAllRepos.getAllRepos("owner", 1).test()
-            .assertValue { result -> result.size == 11 }
-            .assertComplete()
+        val getAllRepos = GetAllRepos(githubRepository)
+        runBlockingTest {
+            `when`(githubRepository.getRepos("owner", 1)).thenReturn(repos)
+            val repos = getAllRepos.getAllRepos("owner", 1)
+            assert(repos.size == 11)
+        }
     }
 }
