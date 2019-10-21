@@ -7,12 +7,12 @@ import android.text.style.TextAppearanceSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.widget.toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
 import com.hubose.applauserepobrowser.R
 import com.hubose.applauserepobrowser.common.addTextStyled
+import com.hubose.applauserepobrowser.common.toast
 import com.hubose.applauserepobrowser.common.url
 import com.hubose.domain.entity.RepoEntity
 import kotlinx.android.synthetic.main.layout_fragment_detail.*

@@ -1,6 +1,7 @@
 package com.hubose.applauserepobrowser.di
 
 import com.hubose.applauserepobrowser.BuildConfig
+import com.hubose.applauserepobrowser.Config
 import com.hubose.data.api.Api
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Rfc3339DateJsonAdapter
@@ -30,7 +31,7 @@ fun createHttpClient(): OkHttpClient {
 inline fun <reified T> createApi(okHttpClient: OkHttpClient): T {
     val moshi = Moshi.Builder().add(Date::class.java, Rfc3339DateJsonAdapter().nullSafe()).build()
     val retrofit = Retrofit.Builder()
-        .baseUrl(BuildConfig.API_BASE_URL)
+        .baseUrl(Config.API_BASE_URL)
         .client(okHttpClient)
         .addConverterFactory(MoshiConverterFactory.create(moshi))
         .build()

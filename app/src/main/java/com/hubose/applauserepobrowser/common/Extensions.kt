@@ -1,10 +1,12 @@
 package com.hubose.applauserepobrowser.common
 
+import android.content.Context
 import android.text.*
 import android.text.method.LinkMovementMethod
 import android.view.View
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
@@ -76,3 +78,7 @@ fun EditText.onTextChanged(): ReceiveChannel<String> =
 
         })
     }
+
+fun Context.toast(text: String) {
+    Toast.makeText(this, text, Toast.LENGTH_LONG).show()
+}
