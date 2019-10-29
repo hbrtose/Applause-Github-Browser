@@ -1,7 +1,6 @@
 package com.hubose.applauserepobrowser.di
 
 import com.hubose.applauserepobrowser.BuildConfig
-import com.hubose.applauserepobrowser.Config
 import com.hubose.applauserepobrowser.details.DetailViewModel
 import com.hubose.applauserepobrowser.entity.RepoListItem
 import com.hubose.applauserepobrowser.list.ListViewModel
@@ -21,7 +20,7 @@ import org.koin.androidx.viewmodel.ext.koin.viewModel
 import org.koin.dsl.module.module
 
 val viewModels = module {
-    viewModel { ListViewModel(get(), get(), get(), Config.REPO_OWNER_NAME, Config.NUMBER_OF_REPOS) }
+    viewModel { ListViewModel(get(), get(), get(), BuildConfig.REPO_OWNER_NAME, BuildConfig.NUMBER_OF_REPOS) }
     viewModel { (id : Int) -> DetailViewModel(id, get()) }
 }
 

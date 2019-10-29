@@ -1,3 +1,5 @@
+import com.hubose.applauserepobrowser.Config
+
 plugins {
     id("com.android.application")
     kotlin("android")
@@ -15,6 +17,10 @@ android {
         versionCode = Dependencies.Android.versionCode
         versionName = Dependencies.Android.versionName
         testInstrumentationRunner = Dependencies.BuildPlugins.testInstrumentationRunner
+
+        buildConfigField("String", "API_BASE_URL", "\"${Config.API_BASE_URL}\"")
+        buildConfigField("String", "REPO_OWNER_NAME", "\"${Config.REPO_OWNER_NAME}\"")
+        buildConfigField("int", "NUMBER_OF_REPOS", "${Config.NUMBER_OF_REPOS}")
     }
     buildTypes {
         getByName("release") {
